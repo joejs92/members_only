@@ -5,7 +5,11 @@ async function check(req, res) {
 }
 
 async function homePage(req, res){
-    res.send(home)
+    res.render("index");
 }
 
-module.exports = {check};
+async function signUpForm(req, res){
+    res.render("sign-up-form");
+}
+
+module.exports = {check, homePage, signUpForm};

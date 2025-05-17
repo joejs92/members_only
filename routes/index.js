@@ -4,6 +4,6 @@ const controller = require("../controllers/controller")
 
 const index = Router();
 
-index.get("/", controller.check);
+index.get("/", controller.homePage);
 
 module.exports = index;
