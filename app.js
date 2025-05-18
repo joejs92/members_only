@@ -6,6 +6,8 @@ const passport = require("passport");
 const index = require("./routes/index");
 const signUpForm = require("./routes/signUpForm");
 const login = require("./routes/login");
+const membership = require("./routes/membership");
+const message = require("./routes/message");
 const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
@@ -19,5 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", index);
 app.get("/sign-up", signUpForm);
 app.get("/login", login);
+app.get("/membership", membership);
+app.get("/create-message", message);
 
 app.listen(3000, () => console.log("app listening on port 3000!"));
