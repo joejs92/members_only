@@ -14,5 +14,22 @@
       <button>Button 3</button>
     </div>
   </header>
+  <div class="content">
+    <ul>
+      <% messages.map((message)=>{%>
+        <li class="messageLineItem">
+          <div class="messageBox">
+            <header>
+              <h2><%= message.title %></h2>
+              <p><%= message.author %></p>
+            </header>
+            <div class="messageBoxContent">
+              <p><%= message.messageText %></p>
+            </div>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
 </body>
 </html>

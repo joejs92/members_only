@@ -3,4 +3,20 @@ header{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 2px solid black;
+}
+
+.messageLineItem{
+    margin-bottom: 12px;
+}
+
+.messageBox{
+    width: 500px;
+    height: 200px;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+ul {
+    list-style-type: none;
 }
