@@ -20,3 +20,30 @@ header{
 ul {
     list-style-type: none;
 }
+
+a {
+    padding-left: 8px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    width: 500px;
+}
+
+button {
+    max-width: 100px;
+    margin-top: 8px;
+}
+
+label {
+    margin-top: 8px;
+}
+
+textarea {
+    width: 500px;
+    height: 400px;
+}

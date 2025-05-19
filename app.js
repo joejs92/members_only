@@ -19,10 +19,11 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname,'public'))); //included for directing to the CSS file. See the 'public' folder.
 
-app.get("/", index);
-app.get("/sign-up", signUpForm);
-app.get("/login", login);
-app.get("/membership", membership);
-app.get("/create-message", message);
+app.use("/sign-up", signUpForm);
+//app.post("/sign-up", signUpForm);
+app.use("/login", login);
+app.use("/membership", membership);
+app.use("/create-message", message);
+app.use("/", index);
 
 app.listen(3000, () => console.log("app listening on port 3000!"));
