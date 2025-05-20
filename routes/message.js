@@ -3,6 +3,6 @@ const controller = require("../controllers/controller")
 
 const message = Router();
 
-message.get("/", controller.createMessagePage);
+message.get("/", controller.getCreateMessagePage);
 
 module.exports = message;

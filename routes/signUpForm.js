@@ -3,6 +3,7 @@ const controller = require("../controllers/controller")
 
 const signUpForm = Router();
 
-signUpForm.get("/", controller.signUpForm);
+signUpForm.get("/", controller.getSignUpForm);
+signUpForm.post("/", controller.postSignUpForm);
 
 module.exports = signUpForm;

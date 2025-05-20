@@ -3,6 +3,6 @@ const controller = require("../controllers/controller")
 
 const membership = Router();
 
-membership.get("/", controller.membershipPage);
+membership.get("/", controller.getMembershipPage);
 
 module.exports = membership;

@@ -20,7 +20,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname,'public'))); //included for directing to the CSS file. See the 'public' folder.
 
 app.use("/sign-up", signUpForm);
-//app.post("/sign-up", signUpForm);
 app.use("/login", login);
 app.use("/membership", membership);
 app.use("/create-message", message);
