@@ -1,10 +1,7 @@
 const pool = require("../db/pool");
 const bcrypt = require("bcryptjs");
-
-const messages = [
-    {title: "Test", author: "Testy Testerson", messageText: "This is just a test to see if the messages will render."},
-    {title: "Next Message Test", author: "Testicles Gloobiopolis", messageText: "This is a test to see if subsequent messages will render correctly."}
-]
+const passport = require("passport");
+const LocalStrategy = require('passport-local').Strategy;
 
 async function getHomePage(req, res){
     try {
@@ -12,11 +9,7 @@ async function getHomePage(req, res){
         res.render("index", {messages: rows});
       } catch(err) {
         console.log(err);
-        //res.redirect("/");
       }
-    //title: title, author: username, messageText: message
-    //SELECT title, users.username, message FROM messages INNER JOIN users ON user_id = users.id;
-
 }
 
 async function getSignUpForm(req, res){
@@ -41,7 +34,7 @@ async function postSignUpForm(req, res){
 }
 
 async function getLoginPage(req, res){
-    res.render("login");
+    res.render("login", {user: req.user});
 }
 
 async function getMembershipPage(req, res){
@@ -51,6 +44,40 @@ async function getMembershipPage(req, res){
 async function getCreateMessagePage(req, res){
     res.render("message");
 }
+
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const { rows } = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+      const user = rows[0];
+
+      if (!user) {
+        return done(null, false, { message: "Incorrect username" });
+      }
+      if (user.password !== password) {
+        return done(null, false, { message: "Incorrect password" });
+      }
+      return done(null, user);
+    } catch(err) {
+      return done(err);
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+    const user = rows[0];
+
+    done(null, user);
+  } catch(err) {
+    done(err);
+  }
+});
 
 module.exports = {getHomePage, 
     getSignUpForm,

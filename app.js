@@ -6,6 +6,7 @@ const passport = require("passport");
 const index = require("./routes/index");
 const signUpForm = require("./routes/signUpForm");
 const login = require("./routes/login");
+const logout = require("./routes/logout");
 const membership = require("./routes/membership");
 const message = require("./routes/message");
 const LocalStrategy = require('passport-local').Strategy;
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname,'public'))); //included for directing
 
 app.use("/sign-up", signUpForm);
 app.use("/login", login);
+app.use("/logout", logout);
 app.use("/membership", membership);
 app.use("/create-message", message);
 app.use("/", index);

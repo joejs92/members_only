@@ -7,8 +7,13 @@
 </head>
 <body>
   <% if (locals.user) {%>
-    <h1>WELCOME BACK <%= user.username %></h1>
-    <a href="/log-out">LOG OUT</a>
+    <header>
+      <h1>WELCOME BACK <%= user.username %></h1>
+      <div class="buttonContainer">
+        <a href = "/">Home</a>
+        <a href="/logout">Log Out</a>
+      </div>
+    </header>
   <% } else { %>
     <header>
       <h1>Log in</h1>
@@ -17,7 +22,7 @@
         <a href = "/sign-up">Sign up</a>
       </div>
     </header>
-    <form action="/log-in" method="POST">
+    <form action="/login" method="POST">
       <label for="username">Username</label>
       <input id="username" name="username" type="text" />
 
