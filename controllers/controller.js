@@ -6,7 +6,7 @@ const LocalStrategy = require('passport-local').Strategy;
 async function getHomePage(req, res){
     try {
         const { rows } = await pool.query("SELECT title, users.username, message FROM messages INNER JOIN users ON user_id = users.id;");
-        console.log(req.user);
+        //console.log(req.user);
         res.render("index", {messages: rows, user: req.user});
       } catch(err) {
         console.log(err);
@@ -48,14 +48,13 @@ async function getCreateMessagePage(req, res){
 }
 
 async function postCreateMessagePage(req, res){
-  //id title user_id timestamp message
-  try {
-    await pool.query("SELECT title, users.username, message FROM messages INNER JOIN users ON user_id = users.id;");
-    //console.log(req.user);
-    res.render("index", {messages: rows, user: req.user});
+  //title user_id timestamp message
+ try {
+    await pool.query("INSERT INTO messages (title, user_id, message) VALUES ($1, $2, $3)",[req.body.messageTitle, req.user.id, req.body.message]);
   } catch(err) {
     console.log(err);
-  }
+  } 
+  res.redirect("/");
 }
 
 passport.use(
