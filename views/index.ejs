@@ -6,31 +6,38 @@
   <link rel="stylesheet" type ="text/css" href="/style.css"/>
 </head>
 <body>
-  <header>
-    <h1>Message Board</h1>
-    <div class="buttonContainer">
-      <a href = "/sign-up">Sign up</a>
-      <a href = "/login">Login</a>
-      <a href = "/membership">Become a Member!</a>
-      <a href = "/create-message">Create Message</a>
-    </div>
-  </header>
-  <div class="content">
-    <ul>
-      <% messages.map((message)=>{%>
-        <li class="messageLineItem">
-          <div class="messageBox">
-            <header>
-              <h2><%= message.title %></h2>
-              <p><%= message.username %></p>
-            </header>
-            <div class="messageBoxContent">
-              <p><%= message.message %></p>
+    <header>
+      <h1>Message Board</h1>
+      <% if (locals.user) {%>
+        <div class="buttonContainer">
+          <p>Hello, <%= user.username %></p>
+          <a href = "/membership">Become a Member!</a>
+          <a href = "/create-message">Create Message</a>
+          <a href="/logout">Log Out</a>
+        </div>
+      <% } else { %>
+        <div class="buttonContainer">
+          <a href = "/sign-up">Sign up</a>
+          <a href = "/login">Login</a>
+        </div>
+        <%}%>
+    </header>
+    <div class="content">
+      <ul>
+        <% messages.map((message)=>{%>
+          <li class="messageLineItem">
+            <div class="messageBox">
+              <header>
+                <h2><%= message.title %></h2>
+                <p><%= message.username %></p>
+              </header>
+              <div class="messageBoxContent">
+                <p><%= message.message %></p>
+              </div>
             </div>
-          </div>
-        </li>
-      <% }) %>
-    </ul>
-  </div>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
 </body>
 </html>

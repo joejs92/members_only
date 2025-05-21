@@ -6,7 +6,8 @@ const LocalStrategy = require('passport-local').Strategy;
 async function getHomePage(req, res){
     try {
         const { rows } = await pool.query("SELECT title, users.username, message FROM messages INNER JOIN users ON user_id = users.id;");
-        res.render("index", {messages: rows});
+        console.log(req.user);
+        res.render("index", {messages: rows, user: req.user});
       } catch(err) {
         console.log(err);
       }
@@ -38,11 +39,23 @@ async function getLoginPage(req, res){
 }
 
 async function getMembershipPage(req, res){
-    res.render("membership");
+  //admins can only be created with direct DB manipulation!
+  res.render("membership", {user: req.user});
 }
 
 async function getCreateMessagePage(req, res){
-    res.render("message");
+    res.render("message", {user: req.user});
+}
+
+async function postCreateMessagePage(req, res){
+  //id title user_id timestamp message
+  try {
+    await pool.query("SELECT title, users.username, message FROM messages INNER JOIN users ON user_id = users.id;");
+    //console.log(req.user);
+    res.render("index", {messages: rows, user: req.user});
+  } catch(err) {
+    console.log(err);
+  }
 }
 
 passport.use(
@@ -79,9 +92,22 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+/* 
+{
+  id: 1,
+  firstname: 'Testy',
+  lastname: 'Testerson',
+  username: 'TestMan',
+  password: 'boogers',
+  membership: 'user'
+}
+*/
+
 module.exports = {getHomePage, 
     getSignUpForm,
     postSignUpForm, 
     getLoginPage, 
     getMembershipPage, 
-    getCreateMessagePage};
+    getCreateMessagePage,
+    postCreateMessagePage
+  };

@@ -39,6 +39,13 @@ button {
     margin-top: 8px;
 }
 
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 label {
     margin-top: 8px;
 }
