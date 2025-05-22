@@ -5,8 +5,8 @@ const LocalStrategy = require('passport-local').Strategy;
 
 async function getHomePage(req, res){
     try {
-        const { rows } = await pool.query("SELECT title, users.username, message FROM messages INNER JOIN users ON user_id = users.id;");
-        //console.log(req.user);
+        const { rows } = await pool.query("SELECT messages.id, title, users.username, timestamp, message FROM messages INNER JOIN users ON user_id = users.id;");
+        //console.log(rows);
         res.render("index", {messages: rows, user: req.user});
       } catch(err) {
         console.log(err);
@@ -67,7 +67,10 @@ async function getCreateMessagePage(req, res){
 async function postCreateMessagePage(req, res){
   //title user_id timestamp message
  try {
-    await pool.query("INSERT INTO messages (title, user_id, message) VALUES ($1, $2, $3)",[req.body.messageTitle, req.user.id, req.body.message]);
+  //YYYY-MM-DD HH:MN:SS
+    const now = new Date();
+    const dateString = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+    await pool.query("INSERT INTO messages (title, user_id, timestamp, message) VALUES ($1, $2, $3, $4)",[req.body.messageTitle, req.user.id, dateString, req.body.message]);
   } catch(err) {
     console.log(err);
   } 
@@ -83,15 +86,14 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
-      /* if (user.password !== password) {
+      if (user.password !== password) {
         return done(null, false, { message: "Incorrect password" }); 
-        currently set to check 'admin' membership.
-        */
-      const match = await bcrypt.compare(password, user.password);
+      /* currently set to check 'admin' membership.
+       const match = await bcrypt.compare(password, user.password);
       if (!match) {
         // passwords do not match!
         return done(null, false, { message: "Incorrect password" })
-        /* *for not-test data.* */
+        //*for not-test data.*  */
       }
       return done(null, user);
     } catch(err) {
@@ -115,6 +117,16 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+async function deleteMessage(req, res) {
+  //console.log(req.params.messageId);
+  try {
+    await pool.query("DELETE FROM messages WHERE id = $1", [req.params.messageId]);
+  } catch(err) {
+    console.log(err);
+  }
+  res.redirect("/");
+}
+
 /* What is in req.user. For reference
 {
   id: 1,
@@ -133,5 +145,6 @@ module.exports = {getHomePage,
     getMembershipPage,
     postMembershipPage, 
     getCreateMessagePage,
-    postCreateMessagePage
+    postCreateMessagePage,
+    deleteMessage
   };

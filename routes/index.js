@@ -5,5 +5,6 @@ const controller = require("../controllers/controller")
 const index = Router();
 
 index.get("/", controller.getHomePage);
+index.post("/:messageId", controller.deleteMessage);
 
 module.exports = index;

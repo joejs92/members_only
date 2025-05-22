@@ -11,7 +11,7 @@
       <% if (locals.user) {%>
         <% if (locals.user.membership == 'member') {%>
           <div class="buttonContainer">
-            <p>Hello, Member <%= user.username %></p>
+            <p>Hello, <%= user.membership %> <%= user.username %></p>
             <a href = "/create-message">Create Message</a>
             <a href="/logout">Log Out</a>
           </div>
@@ -40,11 +40,33 @@
       <ul>
         <% messages.map((message)=>{%>
           <li class="messageLineItem">
-            <div class="messageBox">
-              <header>
-                <h2><%= message.title %></h2>
-                <p><%= message.username %></p>
-              </header>
+            <div class="messageBox" >
+              <% if (locals.user) {%>
+                <% if (locals.user.membership == 'member') {%>
+                  <header>
+                    <h2><%= message.title %></h2>
+                    <p><%= message.timestamp %></p>
+                    <p><%= message.username %></p>
+                  </header>
+                <% } else if (locals.user.membership == 'admin') {%>
+                  <header>
+                    <h2><%= message.title %></h2>
+                    <p><%= message.timestamp %></p>
+                    <p><%= message.username %></p>
+                    <form action="/<%= message.id %>" method="POST">
+                      <button>Delete</button>
+                    </form>
+                  </header>
+                <% } else { %>
+                  <header>
+                    <h2><%= message.title %></h2>
+                  </header>
+                <%}%>
+              <% } else { %>
+                <header>
+                  <h2><%= message.title %></h2>
+                </header>
+              <%}%>
               <div class="messageBoxContent">
                 <p><%= message.message %></p>
               </div>

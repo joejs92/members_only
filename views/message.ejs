@@ -9,12 +9,26 @@
   <header>
   <h1>Create Message</h1>
   <% if (locals.user) {%>
-    <div class="buttonContainer">
-      <p>Hello, <%= user.username %></p>
-      <a href = "/">Home</a>
-      <a href = "/membership">Become a Member!</a>
-      <a href="/logout">Log Out</a>
-    </div>
+    <% if (locals.user.membership == 'member') {%>
+      <div class="buttonContainer">
+        <p>Hello, <%= user.membership %> <%= user.username %></p>
+        <a href = "/">Home</a>
+        <a href="/logout">Log Out</a>
+      </div>
+    <% } else if (locals.user.membership == 'admin') {%>
+      <div class="buttonContainer">
+        <p>Hello, Lord <%= user.username %></p>
+        <a href = "/">Home</a>
+        <a href="/logout">Log Out</a>
+      </div>
+    <% } else { %>
+      <div class="buttonContainer">
+        <p>Hello, <%= user.username %></p>
+        <a href = "/">Home</a>
+        <a href = "/membership">Become a Member!</a>
+        <a href="/logout">Log Out</a>
+      </div>
+    <%}%>
   <% } else { %>
     <div class="buttonContainer">
       <a href = "/">Home</a>
