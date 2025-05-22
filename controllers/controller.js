@@ -43,6 +43,23 @@ async function getMembershipPage(req, res){
   res.render("membership", {user: req.user});
 }
 
+async function postMembershipPage(req, res){
+  //continue making this function work at least at a basic level.
+  try {
+    const {rows} = await pool.query("SELECT membershipstatus FROM membershipTable WHERE code = $1", [
+      req.body.membershipCode
+    ]);
+    await pool.query("UPDATE users SET membership = $1 WHERE id = $2", [
+      rows[0].membershipstatus,
+      req.user.id
+    ]);
+    res.redirect("/");
+  } catch(err) {
+    console.log(err);
+    res.redirect("/");
+  }
+}
+
 async function getCreateMessagePage(req, res){
     res.render("message", {user: req.user});
 }
@@ -66,8 +83,15 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
-      if (user.password !== password) {
-        return done(null, false, { message: "Incorrect password" });
+      /* if (user.password !== password) {
+        return done(null, false, { message: "Incorrect password" }); 
+        currently set to check 'admin' membership.
+        */
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        // passwords do not match!
+        return done(null, false, { message: "Incorrect password" })
+        /* *for not-test data.* */
       }
       return done(null, user);
     } catch(err) {
@@ -91,7 +115,7 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-/* 
+/* What is in req.user. For reference
 {
   id: 1,
   firstname: 'Testy',
@@ -106,7 +130,8 @@ module.exports = {getHomePage,
     getSignUpForm,
     postSignUpForm, 
     getLoginPage, 
-    getMembershipPage, 
+    getMembershipPage,
+    postMembershipPage, 
     getCreateMessagePage,
     postCreateMessagePage
   };
